@@ -8,6 +8,7 @@ Author:
 import Adafruit_BBIO.GPIO as GPIO
 import Adafruit_BBIO.PWM as PWM
 from fish_tracker import FishTracker
+import cv2
 
 class Motor:
 	'''
@@ -72,7 +73,7 @@ def main():
 	STANDBY = "P9_23"
 
 	fd1, fd2 = "P9_11", "P9_27"
-	rd1, rd2 = "P9_15", "P9_25"
+	rd1, rd2 = "P9_15", "P9_24"
 	steer_1, steer_2 = "P9_17", "P9_18"
 
 	height = 240
