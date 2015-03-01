@@ -38,19 +38,22 @@ PWM_steer = "P9_16"
 STANDBY = "P9_23"
 
 fd1, fd2 = "P9_11", "P9_27"
-rd1, rd2 = "P9_15", "P9_25"
+rd1, rd2 = "P9_15", "P9_24"
 steer_1, steer_2 = "P9_17", "P9_18"
 
 # intialize stuff
 GPIO.setup(STANDBY, GPIO.OUT)
 GPIO.output(STANDBY, GPIO.HIGH)
 
-GPIO.setup(fd1, GPIO.OUT)
-GPIO.setup(fd2, GPIO.OUT)
-PWM.start(PWM_front_drive,0,50,0)
-GPIO.output(fd1, GPIO.HIGH)
-GPIO.output(fd2, GPIO.LOW)
-PWM.set_duty_cycle(25, speed) 
+GPIO.setup(rd1, GPIO.OUT)
+GPIO.setup(rd2, GPIO.OUT)
+PWM.start(PWM_rear_drive,50)
+
+GPIO.output(rd1, GPIO.HIGH)
+GPIO.output(rd2, GPIO.LOW)
+PWM.set_duty_cycle(PWM_rear_drive, 25) 
+
 time.sleep(5)
+
 PWM.cleanup()
 GPIO.cleanup()
