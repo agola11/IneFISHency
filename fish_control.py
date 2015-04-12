@@ -101,6 +101,7 @@ def main():
 		
 		zone = getzone(int(x), int(y), thresh_1x, thresh_2x, thresh_1y, thresh_2y)
 		print zone
+		
 		if zone == 'FORWARD_RIGHT':
 			front.set(25, True)
 			steer.set(20, True)
