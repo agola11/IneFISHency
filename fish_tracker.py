@@ -26,8 +26,8 @@ class FishTracker:
 		self.cap = cv2.VideoCapture(cap)
 		self.height = height
 		self.width = width
-		self.cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, width)
-		self.cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, height)
+		self.cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 360)
+		self.cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, 240)
 		self.h_lo, self.s_lo, self.v_lo = 0, 0, 0
 		self.h_hi, self.s_hi, self.v_hi = 100, 100, 100
 		self.hsv_lower = np.array([self.h_lo, self.s_lo, self.v_lo])
@@ -36,8 +36,9 @@ class FishTracker:
 		self.kernel_open = np.ones((morph_open, morph_open),np.uint8)
 		self.iir = None # will update this in detect_ball
 		self.filter_tap = filter_tap
-		self.buffer_x = deque(maxsize=5)
-		self.buffer_y = deque(maxsize=5)
+		self.buffer_x = deque(maxlen=5)
+		self.buffer_y = deque(maxlen=5)
+		self.median = median
 
 	def get_hsv_lo(self):
 		"""
@@ -106,8 +107,8 @@ class FishTracker:
 		[x, y] = self.iir.state()
 		
 		if len(self.buffer_x) < self.median:
-			self.buffer_x.put(x)
-			self.buffer_y.put(y)
+			self.buffer_x.append(x)
+			self.buffer_y.append(y)
 			[x, y] = [self.width/2, self.height/2]
 		else:
 			self.buffer_x.popleft()
@@ -125,25 +126,61 @@ class FishTracker:
 
 		return (result, (x, y))
 
+
+
 """
 Testing
 """
+
+def getzone(x, y, thresh_1x, thresh_2x, thresh_1y, thresh_2y):
+
+	if x < thresh_1x and y < thresh_1y:
+		return 'FORWARD_RIGHT'
+	elif x < thresh_1x and (y >= thresh_1y and y < thresh_2y):
+		return 'FORWARD_CENTER'
+	elif x < thresh_1x and y >= thresh_2y:
+		return 'FORWARD_LEFT'
+	elif (x >= thresh_1x and x < thresh_2x) and y < thresh_1y:
+		return 'STALL_RIGHT'
+	elif (x >= thresh_1x and x < thresh_2x) and (y >= thresh_1y and y < thresh_2y):
+		return 'STALL_CENTER'
+	elif (x >= thresh_1x and x < thresh_2x) and y >= thresh_2y:
+		return 'STALL_LEFT'
+	elif x >= thresh_2x and y < thresh_1y:
+		return 'READ_RIGHT'
+	elif x >= thresh_2x and (y >= thresh_1y and y < thresh_2y):
+		return 'REAR_CENTER'
+	elif x >= thresh_2x and y >= thresh_2y:
+		return 'REAR_LEFT'
+
 def test():
-	ft = FishTracker(cap=1, filter_tap=0.5)
+	height = 240
+	width = 360
+	STEP = 3
+
+	thresh_1x = width*1.0/STEP
+	thresh_2x = width*2.0/STEP
+	thresh_1y = height*1.0/STEP
+	thresh_2y = height*2.0/STEP
+
 	'''
-	H_LOW = 0, S_LOW = 175, V_LOW = 0
-	H_HI = 28, S_HI = 255, V_HI = 218
+	H_LOW = 5, S_LOW = 218, V_LOW = 189
+	H_HI = 15, S_HI = 255, V_HI = 255
 	'''
-	ft.set_hsv_lo((0, 175, 0))
-	ft.set_hsv_hi((28, 255, 218))
+
+	ft = FishTracker(cap=0, filter_tap=0.5, height=height, width=width)
+	ft.set_hsv_lo((5, 218, 189))
+	ft.set_hsv_hi((15, 255, 255))
+
 	while True:
 		(res, state) = ft.detect_fish(show_res=True)
-		print state
+		#print state
+		x, y = state
+		print getzone(int(x), int(y), thresh_1x, thresh_2x, thresh_1y, thresh_2y)
 		cv2.imshow('result',res)
 		k = cv2.waitKey(5) & 0xFF
 		if k == 27:
 			break
-
 	ft.release_cap()
 
 test()

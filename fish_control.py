@@ -53,13 +53,16 @@ def main():
 	rd1, rd2 = "P9_15", "P9_15"
 	steer_1, steer_2 = "P9_17", "P9_18"
 
+	height = 240
+	width = 360
+
 	# intialize stuff
 	GPIO.output(STANDBY, GPIO.HIGH)
 	front = Motor(fd1, fd2, PWM_front_drive)
 	rear = Motor(rd1, rd2, PWM_rear_drive)
 	steer = Motor(steer_1, steer_2, PWM_steer)
 
-	ft = FishTracker(cap=1, filter_tap=0.5)
+	ft = FishTracker(cap=1, filter_tap=0.5, height=height, width=width)
 	ft.set_hsv_lo((0, 175, 0))
 	ft.set_hsv_hi((28, 255, 218))
 	while True:
