@@ -143,7 +143,7 @@ def getzone(x, y, thresh_1x, thresh_2x, thresh_1y, thresh_2y):
 	elif (x >= thresh_1x and x < thresh_2x) and y < thresh_1y:
 		return 'STALL_RIGHT'
 	elif (x >= thresh_1x and x < thresh_2x) and (y >= thresh_1y and y < thresh_2y):
-		return 'STALL_CENTER'
+		return 'NO_FLEX_ZONE'
 	elif (x >= thresh_1x and x < thresh_2x) and y >= thresh_2y:
 		return 'STALL_LEFT'
 	elif x >= thresh_2x and y < thresh_1y:

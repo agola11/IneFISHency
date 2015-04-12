@@ -39,11 +39,33 @@ class Motor:
 
 		PWM.set_duty_cycle(self.pwm, speed) 
 
+def getzone(x, y, thresh_1x, thresh_2x, thresh_1y, thresh_2y):
+	'''
+	get the zone according to the x,y position
+	'''
+	if x < thresh_1x and y < thresh_1y:
+		return 'FORWARD_RIGHT'
+	elif x < thresh_1x and (y >= thresh_1y and y < thresh_2y):
+		return 'FORWARD_CENTER'
+	elif x < thresh_1x and y >= thresh_2y:
+		return 'FORWARD_LEFT'
+	elif (x >= thresh_1x and x < thresh_2x) and y < thresh_1y:
+		return 'STALL_RIGHT'
+	elif (x >= thresh_1x and x < thresh_2x) and (y >= thresh_1y and y < thresh_2y):
+		return 'NO_FLEX_ZONE'
+	elif (x >= thresh_1x and x < thresh_2x) and y >= thresh_2y:
+		return 'STALL_LEFT'
+	elif x >= thresh_2x and y < thresh_1y:
+		return 'READ_RIGHT'
+	elif x >= thresh_2x and (y >= thresh_1y and y < thresh_2y):
+		return 'REAR_CENTER'
+	elif x >= thresh_2x and y >= thresh_2y:
+		return 'REAR_LEFT'
+
 def main():
 	'''
 	main driver for fish control of RC car
 	'''
-
 	PWM_front_drive = "P9_14"
 	PWM_rear_drive = "P9_21"
 	PWM_steer = "P9_16"
@@ -55,6 +77,12 @@ def main():
 
 	height = 240
 	width = 360
+	STEP = 3
+
+	thresh_1x = width*1.0/STEP
+	thresh_2x = width*2.0/STEP
+	thresh_1y = height*1.0/STEP
+	thresh_2y = height*2.0/STEP
 
 	# intialize stuff
 	GPIO.output(STANDBY, GPIO.HIGH)
@@ -68,6 +96,8 @@ def main():
 	while True:
 		(res, state) = ft.detect_fish(show_res=True)
 		print state
+		x, y = state
+		print getzone(int(x), int(y), thresh_1x, thresh_2x, thresh_1y, thresh_2y)
 		cv2.imshow('result',res)
 		k = cv2.waitKey(5) & 0xFF
 		if k == 27:
