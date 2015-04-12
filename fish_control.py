@@ -97,6 +97,7 @@ def main():
 		(res, state) = ft.detect_fish(show_res=False)
 		#print state
 		x, y = state
+		
 		zone = getzone(int(x), int(y), thresh_1x, thresh_2x, thresh_1y, thresh_2y)
 		print zone
 		if zone == 'FORWARD_RIGHT':
@@ -106,9 +107,11 @@ def main():
 			front.set(25, True)
 			front.set(0, True)
 		elif zone == 'FORWARD_LEFT':
-			front.set(25, 0)
+			front.set(25, True)
 			front.set(20, False)
-		
+		elif zone == 'STALL_RIGHT':
+			front.set
+
 		#cv2.imshow('result',res)
 		k = cv2.waitKey(5) & 0xFF
 		if k == 27:
