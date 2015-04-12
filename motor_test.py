@@ -40,20 +40,13 @@ fd1, fd2 = "P9_11", "P9_27"
 rd1, rd2 = "P9_15", "P9_25"
 steer_1, steer_2 = "P9_17", "P9_18"
 
-height = 240
-width = 360
-STEP = 3
-
-thresh_1x = width*1.0/STEP
-thresh_2x = width*2.0/STEP
-thresh_1y = height*1.0/STEP
-thresh_2y = height*2.0/STEP
-
 # intialize stuff
 GPIO.setup(STANDBY, GPIO.OUT)
 GPIO.output(STANDBY, GPIO.HIGH)
-front = Motor(fd1, fd2, PWM_front_drive)
-rear = Motor(rd1, rd2, PWM_rear_drive)
-steer = Motor(steer_1, steer_2, PWM_steer)
 
-front.set(25, True)
+GPIO.setup(fd1, GPIO.OUT)
+GPIO.setup(fd2, GPIO.OUT)
+PWM.start(PWM_front_drive,0,50,0)
+GPIO.output(fd1, GPIO.HIGH)
+GPIO.output(fd2, GPIO.LOW)
+PWM.set_duty_cycle(25, speed) 
