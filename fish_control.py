@@ -22,7 +22,7 @@ class Motor:
 		self.pwm = pwm
 		GPIO.setup(self.p1, GPIO.OUT)
 		GPIO.setup(self.p2, GPIO.OUT)
-		PWM.start(self.pwm,0,50,0)
+		PWM.start(self.pwm,50)
 
 	def set(self, speed, forward):
 		'''
