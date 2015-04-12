@@ -1,7 +1,7 @@
 '''
 iir_filter.property
 Author:
-    Ankush Gola, David Fridovich-Keil
+    Ankush Gola (adapted from David Fridovich-Keil)
 '''
 
 import numpy as np

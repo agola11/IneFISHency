@@ -26,8 +26,8 @@ class FishTracker:
 		self.cap = cv2.VideoCapture(cap)
 		self.height = height
 		self.width = width
-		self.cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 360)
-		self.cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, 240)
+		self.cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, width)
+		self.cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, height)
 		self.h_lo, self.s_lo, self.v_lo = 0, 0, 0
 		self.h_hi, self.s_hi, self.v_hi = 100, 100, 100
 		self.hsv_lower = np.array([self.h_lo, self.s_lo, self.v_lo])
