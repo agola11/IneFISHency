@@ -74,7 +74,7 @@ def main():
 
 	fd1, fd2 = "P9_11", "P9_27"
 	rd1, rd2 = "P9_15", "P9_24"
-	steer_1, steer_2 = "P9_17", "P9_18"
+	steer_1, steer_2 = "P9_13", "P9_12"
 
 	height = 240
 	width = 360
