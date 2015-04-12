@@ -14,13 +14,14 @@ class Motor:
 	'''
 	A Motor. YEE.
 	'''
-	def __init__(self, p1, p2, pwm):
+	def __init__(self, p1, p2, pwm, forward):
 		'''
 		set up the motor pin assignments
 		'''
 		self.p1 = p1
 		self.p2 = p2
 		self.pwm = pwm
+		self.forward = forward
 		GPIO.setup(self.p1, GPIO.OUT)
 		GPIO.setup(self.p2, GPIO.OUT)
 		PWM.start(self.pwm,50)
@@ -31,12 +32,20 @@ class Motor:
 		speed is a number from 1 to 50
 		forward is True if you want the motor to spin forward.
 		'''
-		if forward == True:
-			GPIO.output(self.p1, GPIO.HIGH)
-			GPIO.output(self.p2, GPIO.LOW)
+		if self.forward:
+			if forward == True:
+				GPIO.output(self.p1, GPIO.HIGH)
+				GPIO.output(self.p2, GPIO.LOW)
+			else:		
+				GPIO.output(self.p1, GPIO.LOW)
+				GPIO.output(self.p2, GPIO.HIGH)
 		else:		
-			GPIO.output(self.p1, GPIO.LOW)
-			GPIO.output(self.p2, GPIO.HIGH)			
+			if forward == True:
+				GPIO.output(self.p1, GPIO.LOW)
+				GPIO.output(self.p2, GPIO.HIGH)
+			else:		
+				GPIO.output(self.p1, GPIO.HIGH)
+				GPIO.output(self.p2, GPIO.LOW)
 
 		PWM.set_duty_cycle(self.pwm, speed) 
 
@@ -88,9 +97,9 @@ def main():
 	# intialize stuff
 	GPIO.setup(STANDBY, GPIO.OUT)
 	GPIO.output(STANDBY, GPIO.HIGH)
-	front = Motor(fd1, fd2, PWM_front_drive)
-	rear = Motor(rd1, rd2, PWM_rear_drive)
-	steer = Motor(steer_1, steer_2, PWM_steer)
+	front = Motor(fd1, fd2, PWM_front_drive, True)
+	rear = Motor(rd1, rd2, PWM_rear_drive, False)
+	steer = Motor(steer_1, steer_2, PWM_steer, True)
 
 	ft = FishTracker(cap=0, filter_tap=0.5, height=height, width=width)
 	ft.set_hsv_lo((0, 158, 83))
