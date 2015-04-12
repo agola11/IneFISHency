@@ -126,6 +126,28 @@ class FishTracker:
 
 		return (result, (x, y))
 
+def getzone(x, y, thresh_1x, thresh_2x, thresh_1y, thresh_2y):
+	'''
+	get the zone according to the x,y position
+	'''
+	if x < thresh_1x and y < thresh_1y:
+		return 'FORWARD_RIGHT'
+	elif x < thresh_1x and (y >= thresh_1y and y < thresh_2y):
+		return 'FORWARD_CENTER'
+	elif x < thresh_1x and y >= thresh_2y:
+		return 'FORWARD_LEFT'
+	elif (x >= thresh_1x and x < thresh_2x) and y < thresh_1y:
+		return 'STALL_RIGHT'
+	elif (x >= thresh_1x and x < thresh_2x) and (y >= thresh_1y and y < thresh_2y):
+		return 'NO_FLEX_ZONE'
+	elif (x >= thresh_1x and x < thresh_2x) and y >= thresh_2y:
+		return 'STALL_LEFT'
+	elif x >= thresh_2x and y < thresh_1y:
+		return 'REAR_RIGHT'
+	elif x >= thresh_2x and (y >= thresh_1y and y < thresh_2y):
+		return 'REAR_CENTER'
+	elif x >= thresh_2x and y >= thresh_2y:
+		return 'REAR_LEFT'
 
 
 """

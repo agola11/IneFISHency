@@ -4,6 +4,8 @@ import cv2
 import numpy as np
 
 cap = cv2.VideoCapture(1)
+cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 360)
+cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, 240)
 
 '''
 H_LOW = 0, S_LOW = 145, V_LOW = 134
