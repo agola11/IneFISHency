@@ -50,6 +50,7 @@ thresh_1y = height*1.0/STEP
 thresh_2y = height*2.0/STEP
 
 # intialize stuff
+GPIO.setup(STANDBY, GPIO.OUT)
 GPIO.output(STANDBY, GPIO.HIGH)
 front = Motor(fd1, fd2, PWM_front_drive)
 rear = Motor(rd1, rd2, PWM_rear_drive)
