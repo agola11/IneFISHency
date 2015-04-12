@@ -1,5 +1,6 @@
 import Adafruit_BBIO.GPIO as GPIO
 import Adafruit_BBIO.PWM as PWM
+import time
 
 class Motor:
 	'''
@@ -50,3 +51,6 @@ PWM.start(PWM_front_drive,0,50,0)
 GPIO.output(fd1, GPIO.HIGH)
 GPIO.output(fd2, GPIO.LOW)
 PWM.set_duty_cycle(25, speed) 
+time.sleep(5)
+PWM.cleanup()
+GPIO.cleanup()
