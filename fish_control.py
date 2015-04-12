@@ -114,30 +114,39 @@ def main():
 		
 		if zone == 'FORWARD_RIGHT':
 			front.set(25, True)
+			rear.set(25, True)
 			steer.set(20, True)
 		elif zone == 'FORWARD_CENTER':
 			front.set(25, True)
+			rear.set(25, True)
 			steer.set(0, True)
 		elif zone == 'FORWARD_LEFT':
 			front.set(25, True)
+			rear.set(25, True)
 			steer.set(20, False)
 		elif zone == 'STALL_RIGHT':
 			front.set(0, True)
+			rear.set(0, True)
 			steer.set(20, True)
 		elif zone == 'NO_FLEX_ZONE':
 			front.set(0, True)
+			rear.set(0, True)
 			steer.set(0, False)
 		elif zone == 'STALL_LEFT':
 			front.set(0, True)
+			rear.set(0, True)
 			steer.set(20, False)
 		elif zone == 'REAR_RIGHT':
-			rear.set(25, True)
+			front.set(25, False)
+			rear.set(25, False)
 			steer.set(20, True)
 		elif zone == 'REAR_CENTER':
-			rear.set(25, True)
+			front.set(25, False)
+			rear.set(25, False)
 			steer.set(0, True)
 		elif zone == 'REAR_LEFT':
-			rear.set(25, True)
+			front.set(25, False)
+			rear.set(25, False)
 			steer.set(20, False)
 
 		#cv2.imshow('result',res)
