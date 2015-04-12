@@ -7,13 +7,14 @@ Author:
 import cv2
 import numpy as np
 from iir_filter import IIRFilter
+from collections import deque
 
 class FishTracker:
 	"""
 	FishTracker is a class that implements fish tracking via either svm or hsv masking
 	"""
 
-	def __init__(self, cap=0, morph_close=5, morph_open=5, filter_tap=0):
+	def __init__(self, cap=0, morph_close=5, morph_open=5, filter_tap=0, height=240, width=360, median=5):
 		"""
 		return an instance of FishTracker
 		cap: which video capture to use
@@ -23,8 +24,10 @@ class FishTracker:
 		filter_tap: weight in iir filter
 		"""
 		self.cap = cv2.VideoCapture(cap)
-		#self.cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 360)
-		#self.cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, 240)
+		self.height = height
+		self.width = width
+		self.cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 360)
+		self.cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, 240)
 		self.h_lo, self.s_lo, self.v_lo = 0, 0, 0
 		self.h_hi, self.s_hi, self.v_hi = 100, 100, 100
 		self.hsv_lower = np.array([self.h_lo, self.s_lo, self.v_lo])
@@ -33,6 +36,8 @@ class FishTracker:
 		self.kernel_open = np.ones((morph_open, morph_open),np.uint8)
 		self.iir = None # will update this in detect_ball
 		self.filter_tap = filter_tap
+		self.buffer_x = deque(maxsize=5)
+		self.buffer_y = deque(maxsize=5)
 
 	def get_hsv_lo(self):
 		"""
@@ -89,8 +94,8 @@ class FishTracker:
 			mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, self.kernel_open)
 
 		moments = cv2.moments(mask, True)
-		cx = moments['m10'] / moments['m00'] if moments['m00'] != 0 else 0
-		cy = moments['m01'] / moments['m00'] if moments['m00'] != 0 else 0
+		cx = moments['m10'] / moments['m00'] if moments['m00'] != 0 else self.width/2
+		cy = moments['m01'] / moments['m00'] if moments['m00'] != 0 else self.height/2
 
 		if self.iir == None:
 			# create new IIRFilter if first run
@@ -99,6 +104,18 @@ class FishTracker:
 			self.iir.update(np.float32((cx, cy)))
 
 		[x, y] = self.iir.state()
+		
+		if len(self.buffer_x) < self.median:
+			self.buffer_x.put(x)
+			self.buffer_y.put(y)
+			[x, y] = [self.width/2, self.height/2]
+		else:
+			self.buffer_x.popleft()
+			self.buffer_y.popleft()
+			self.buffer_x.append(x)
+			self.buffer_y.append(y)
+			[x, y] = np.median(self.buffer_x), np.median(self.buffer_y)
+
 
 		if show_res:
 			result = cv2.bitwise_and(frame,frame,mask = mask)
