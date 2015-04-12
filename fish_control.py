@@ -71,8 +71,8 @@ def main():
 	PWM_steer = "P9_16"
 	STANDBY = "P9_23"
 
-	fd1, fd2 = "P9_11", "P9_12"
-	rd1, rd2 = "P9_15", "P9_15"
+	fd1, fd2 = "P9_11", "P9_27"
+	rd1, rd2 = "P9_15", "P9_25"
 	steer_1, steer_2 = "P9_17", "P9_18"
 
 	height = 240
@@ -91,8 +91,8 @@ def main():
 	steer = Motor(steer_1, steer_2, PWM_steer)
 
 	ft = FishTracker(cap=1, filter_tap=0.5, height=height, width=width)
-	ft.set_hsv_lo((0, 175, 0))
-	ft.set_hsv_hi((28, 255, 218))
+	ft.set_hsv_lo((0, 158, 83))
+	ft.set_hsv_hi((29, 255, 218))
 	while True:
 		(res, state) = ft.detect_fish(show_res=True)
 		print state

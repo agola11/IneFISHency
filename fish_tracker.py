@@ -168,10 +168,9 @@ def test():
 	H_HI = 15, S_HI = 255, V_HI = 255
 	'''
 
-	ft = FishTracker(cap=0, filter_tap=0.5, height=height, width=width)
-	ft.set_hsv_lo((5, 218, 189))
-	ft.set_hsv_hi((15, 255, 255))
-
+	ft = FishTracker(cap=1, filter_tap=0.5, height=height, width=width)
+	ft.set_hsv_lo((0, 158, 83))
+	ft.set_hsv_hi((29, 255, 218))
 	while True:
 		(res, state) = ft.detect_fish(show_res=True)
 		#print state
