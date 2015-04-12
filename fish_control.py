@@ -90,15 +90,15 @@ def main():
 	rear = Motor(rd1, rd2, PWM_rear_drive)
 	steer = Motor(steer_1, steer_2, PWM_steer)
 
-	ft = FishTracker(cap=1, filter_tap=0.5, height=height, width=width)
+	ft = FishTracker(cap=0, filter_tap=0.5, height=height, width=width)
 	ft.set_hsv_lo((0, 158, 83))
 	ft.set_hsv_hi((29, 255, 218))
 	while True:
-		(res, state) = ft.detect_fish(show_res=True)
-		print state
+		(res, state) = ft.detect_fish(show_res=False)
+		#print state
 		x, y = state
 		print getzone(int(x), int(y), thresh_1x, thresh_2x, thresh_1y, thresh_2y)
-		cv2.imshow('result',res)
+		#cv2.imshow('result',res)
 		k = cv2.waitKey(5) & 0xFF
 		if k == 27:
 			break
