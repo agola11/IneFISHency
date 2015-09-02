@@ -7,6 +7,7 @@
     <meta name="description" content="Inefishency : A fishtank mounted on an RC car chassis.  The fish&#39;s movements control the vehicle (think of a hamster ball, except for a fish...). First place at HackPrinceton Spring 2015!">
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"></link>
 
     <title>Inefishency</title>
   </head>
@@ -34,13 +35,22 @@
         <h1>
 <a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction</h1>
 
-<p>A fish is a low-maintenance, yet boring pet.  We built a vehicle consisting of a fishtank mounted on a motorized chassis that moves according to the fish's orientation.  This is basically a "hamster ball" for a fish.  To accomplish this, we mounted a webcam above the fishtank and tracked the fish's position in the tank using image processing.  The fish's orientation (x, y position) was translated into motor signals.  This was all done in 24 hours and we managed to pull off first place at <a href="http://hackprinceton.com/">HackPrinceton</a>!</p>
+<p>A fish is a low-maintenance, yet boring pet.  We built a vehicle consisting of a fishtank mounted on a motorized chassis that moves according to the orientation of a fish inside the tank.  Think of a "hamster ball" for a fish.  To accomplish this, we mounted a webcam above the fishtank and tracked the fish's position in the tank using image processing.  The fish's orientation istranslated into motor signals.  This was all done in 24 hours during <a href="http://hackprinceton.com/">HackPrinceton</a>!</p> Spring 2015 and we managed to pull off first place!
 
 Here is a video:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/Xo1lYPF1lWE" frameborder="0" allowfullscreen></iframe> 
 
-<p>We probably look and sound tired because we pulled an all-nighter :)</p>
+<p>We probably look and sound tired because we had just pulled an all-nighter :)</p>
+
+<div class="thumbnail">
+  <img src="images/finished1.jpg" style="width: 260px; height: 220px;">
+</div>
+
+<div class="thumbnail">
+  <img src="images/winning.jpg" style="width: 260px; height: 220px;">
+</div>
+
 
 <h2>
 <a id="people" class="anchor" href="#people" aria-hidden="true"><span class="octicon octicon-link"></span></a>People</h2>
@@ -48,16 +58,16 @@ Here is a video:
 <p>Ankush Gola, Joseph Bolling, Ted Brundage</p>
 
 <h1>
-<a id="high-level-overview" class="anchor" href="#high-level-overview" aria-hidden="true"><span class="octicon octicon-link"></span></a>High-Level Overview</h1>
+<a id="high-level-overview" class="anchor" href="#high-level-overview" aria-hidden="true"><span class="octicon octicon-link"></span></a>Brief Technical Overview</h1>
 
-<p>We used a BeagleBone Black (powered with a power-regulated battery pack) for our processing and I/O.  We also used a pair of <a href="https://www.sparkfun.com/products/9457">motor controllers</a>, </p>
+<p>We used a BeagleBone Black (powered with a power-regulated battery pack) for our processing and I/O.  We also used a pair of <a href="https://www.sparkfun.com/products/9457">motor controllers</a>, a Logitech C210 webcam for video capture, and a modified <a href="http://www.amazon.com/New-Bright-Monster-Grave-Digger/dp/B00H15X2D4/ref=sr_1_5?ie=UTF8&qid=1441179833&sr=8-5&keywords=monster+rc+car">RC car chassis</a>.</p>
 
 <h2>
 <a id="tracking-the-fish" class="anchor" href="#tracking-the-fish" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tracking the Fish</h2>
 
 <p>A BeagleBone Black embedded linux computer runs an image processing algorithm on a video feed of the fishtank.  To get the computation to be reasonably fast, we had to play with both the framerate and video dimensions. </p>
 
-<p>The <code>FishTracker</code> class in <code>fish_tracker.py</code> implements the logic for tracking the position of the fish in the tank.  The basic idea is to use a combination of background segmentation using HSV masking to obtain a binary mask, perform morphological operations to de-noise the mask, find the centroid of the the mask to obtain a rough (x,y) position in pixel coordinates, and low pass and median filter the position to eliminate "jumpy" readings.  The result of fish tracking is an (x,y) position in pixel coordinates.  (See the <code>detect_fish</code> function in <code>FishTracker</code>).  We made extensive use of the python OpenCV library. </p>
+<p>The <code>FishTracker</code> class in <code>fish_tracker.py</code> implements the logic for tracking the position of the fish in the tank.  The idea is to segment out the background using HSV masking, perform morphological operations to de-noise the mask, find the centroid of the the mask to obtain a rough (x,y) position in pixel coordinates, and low pass and median filter the position to eliminate "jumpy" readings.  The result of fish tracking is an (x,y) position of the fish in pixel coordinates.  (See the <code>detect_fish</code> function in <code>FishTracker</code>).  We made extensive use of the python OpenCV library. </p>
 
 <h2>
 <a id="moving-the-vehicle" class="anchor" href="#moving-the-vehicle" aria-hidden="true"><span class="octicon octicon-link"></span></a>Moving The Vehicle</h2>
